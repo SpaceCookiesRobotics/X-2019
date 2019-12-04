@@ -90,9 +90,15 @@ void drivercontrol() {
     RightMotor.spin( forward, y-x,  pct);
     CenterMotor.spin( forward, -z*0.5 ,  pct);
     */
-
+    // arms control
     ArmMotorLeft.spin(forward, Controller2.Axis3.value(),  pct);
-    ArmMotorRight.spin(forward, Controller2.Axis2.value(),  pct);
+    ArmMotorRight.spin(forward, Controller2.Axis3.value(),  pct);
+
+  if (Controller2.ButtonX.pressed(void)){
+    ArmMotorLeft.spinToPosition(45, degrees);
+    ArmMotorRight.spinToPosition(45, degrees);
+  }
+
 
     // flaps -- goes around in circles to pick up the cube
     if (Controller2.ButtonUp.pressing()) {
@@ -107,7 +113,7 @@ void drivercontrol() {
     }
 
     // Ramp control
-    RCMotor.spin( forward, Controller2.Axis1.value(), pct);
+    RCMotor.spin( forward, Controller2.Axis4.value(), pct);
 
     vex::task::sleep(20); // leave this at end of the while loop
   }
