@@ -10,48 +10,54 @@
 // ---- START VEXCODE CONFIGURED DEVICES ----
 // Robot Configuration:
 // [Name]               [Type]        [Port(s)]
-// RightMotor           motor         10
-// LeftMotor            motor         3
-// RCMotor              motor         2
-// ArmMotorRight        motor         18
-// ArmMotorLeft         motor         11
-// FlapMotor2           motor         1
-// FlapMotor1           motor         17
-// CenterMotor          motor         21
-// Controller1          controller
-// Controller2          controller
+// RightMotor           motor         10              
+// LeftMotor            motor         3               
+// RCMotor              motor         2               
+// ArmMotorRight        motor         18              
+// ArmMotorLeft         motor         11              
+// FlapMotor2           motor         1               
+// FlapMotor1           motor         17              
+// CenterMotor          motor         21              
+// Controller1          controller                    
+// Controller2          controller                    
 // ---- END VEXCODE CONFIGURED DEVICES ----
 
 #include "vex.h"
 competition Competition;
 using namespace vex;
 void driveChassis(double distance, double sideways) { //moves the chassis motors a certain number of turns so the chassis can move linearlly
-  LeftMotor.spinFor(distance, turns);
-  RightMotor.spinFor(distance, turns);
-  CenterMotor.spinFor(sideways, turns);//only needed for moving sideways
+  LeftMotor.spinFor(distance, turns, true);
+  RightMotor.spinFor(distance, turns, true);
+  CenterMotor.spinFor(sideways, turns);//only needed for moving sideways or used in conjunction with the other motors to move diagonally
 }
 void turnChassis(double distance, double sideways) { //moves the chassis motors a certain number of turns so the chassis can turn
   LeftMotor.spinFor(distance, turns);
   RightMotor.spinFor(-distance, turns);
-  CenterMotor.spinFor(sideways, turns); // only for moving diagonally
+  CenterMotor.spinFor(sideways, turns); //might aide in turning??? not sure if we need this for this function
 }
 void moveRamp(double angle) { //moves the ramp motor to a certain angle
   RCMotor.spinToPosition(angle, degrees);
  }
+
 void moveArms(double angle) { //moves the arms to a certain angle
   ArmMotorLeft.spinToPosition(angle, degrees);
   ArmMotorRight.spinToPosition(angle, degrees);
 }
 
 void simpleAuton(void) { // scores the preload and releases the intake rollers
-  driveChassis(-50, 0);  // moves forward 50 rotations
-  driveChassis(50, 0);   // moves back 50 rotations
+  driveChassis(-5, 0);  // moves forward 50 rotations
+  driveChassis(5, 0);   // moves back 50 rotations
   driveChassis(0, 0);    // stops the chassis
   moveArms(45); // moves the arms up to the position 45 degrees to releace the intake rollers
   moveArms(0);  // moves the arms back down to the original position, ready for the start of the match
 }
 void redSquareLeftauton(void) {
-
+  moveArms(45); // moves the arms up to the position 45 degrees to releace the intake rollers
+  moveArms(0);  // moves the arms back down to the original position, ready for the start of the match
+  turnChassis(15,0); //turns the robot to face the cube
+  driveChassis(30,0); //drives the robot to the cube
+  
+  
 }
 
 void pre_auton() {

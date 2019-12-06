@@ -15,7 +15,7 @@ motor ArmMotorRight = motor(PORT18, ratio18_1, false);
 motor ArmMotorLeft = motor(PORT11, ratio18_1, true);
 motor FlapMotor2 = motor(PORT1, ratio18_1, false);
 motor FlapMotor1 = motor(PORT17, ratio18_1, true);
-motor CenterMotor = motor(PORT21, ratio18_1, false);
+motor CenterMotor = motor(PORT21, ratio36_1, false);
 controller Controller1 = controller(primary);
 controller Controller2 = controller(partner);
 
