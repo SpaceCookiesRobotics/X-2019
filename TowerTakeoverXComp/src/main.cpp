@@ -43,6 +43,9 @@ void moveArms(double angle) { //moves the arms to a certain angle
   ArmMotorLeft.spinToPosition(angle, degrees);
   ArmMotorRight.spinToPosition(angle, degrees);
 }
+void spinIntake (double rotations){
+  FlapMotor1.isSpinning();
+}
 
 void simpleAuton(void) { // scores the preload and releases the intake rollers
   driveChassis(-5, 0);  // moves forward 50 rotations
@@ -56,6 +59,7 @@ void redSquareLeftauton(void) {
   moveArms(0);  // moves the arms back down to the original position, ready for the start of the match
   turnChassis(15,0); //turns the robot to face the cube
   driveChassis(30,0); //drives the robot to the cube
+
   
   
 }
