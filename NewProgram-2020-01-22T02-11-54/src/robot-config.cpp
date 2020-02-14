@@ -16,7 +16,7 @@ motor LeftMotor = motor(PORT3, ratio18_1, true);
 motor RightMotor = motor(PORT10, ratio18_1, false);
 motor ArmMotorLeft = motor(PORT4, ratio18_1, true);
 motor FlapMotor2 = motor(PORT5, ratio36_1, true);
-motor ArmMotorRight = motor(PORT6, ratio18_1, true);
+motor ArmMotorRight = motor(PORT6, ratio18_1, false);
 motor CenterMotor = motor(PORT21, ratio18_1, false);
 
 // VEXcode generated functions
