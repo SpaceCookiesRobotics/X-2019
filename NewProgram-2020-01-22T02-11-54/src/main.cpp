@@ -70,57 +70,6 @@ int whichPressed(int x, int y){
   }
 }
 
-
-/*void setButton(int pos, const char* desc) { // , color c = black
-  // These should be the same as in whichButtonPressed
-  int size = 80;
-  int xs[8] = {10, 120, 230, 10, 120, 230};
-  int ys[8] = {25, 25, 25, 145, 145, 145};
-  int brows[8] = {1, 1, 1, 7, 7, 7};
-  int bcols[8] = {2, 13, 24, 2, 13, 24};
-  int crows[8] = {1, 2, 3, 1, 2, 3};
-  int ccols[8] = {1, 1, 1, 12, 12, 12};
-
-  // Draw the button on brain screen
-  Brain.Screen.drawRectangle(xs[pos-1], ys[pos-1], size, size);
-  Brain.Screen.setCursor(brows[pos-1], bcols[pos-1]);
-  Brain.Screen.print(desc);
-
-  // Print options to controller screen
-  Controller1.Screen.setCursor(crows[pos-1], ccols[pos-1]);
-  Controller1.Screen.print(desc);
-}
-
-void clearScreens() {
-  Brain.Screen.clearScreen();
-  Controller1.Screen.clearScreen();
-  task::sleep(500);
-}
-
-bool pointInRectangle(int x, int y, int x1, int y1, int x2, int y2) {
-  if ((x >= x1 && x <= x2) && (y >= y1 && y <= y2)) {
-    return true;
-  } else {
-    return false;
-  }
-}
-
-int whichButtonPressed(int x, int y) {
-  // These should be the same as in setButton
-  int size = 100;
-  int xs[8] = {10, 120, 230, 10, 120, 230};
-  int ys[8] = {25, 25, 25, 145, 145, 145};
-
-  // Return which button if point is in defined regions
-  for (int i=1; i <= 8; i++) {
-    if (pointInRectangle(x, y, xs[i-1], ys[i-1], xs[i-1]+size, ys[i-1]+size)) {
-      return i;
-    }
-  }
-
-  // Return 0 if not in defined button regions
-  return 0;
-}*/
 /*------------------------------------------------------------------*/
 /*                          Robot Functions                         */
 /*                  designed for specific parts of                  */
@@ -491,49 +440,8 @@ void preAuton(void) {
   
   //must return for autonomous or driverControl to run
   return;
-
-  // Selection of autonomous tasks using brain screen or controller
-  /*// First task: Define buttons
-  clearScreens();
-  setButton(1, "Y:");
-  setButton(2, "X:");
-  setButton(3, "A:");
-  setButton(4, "Left:");
-  setButton(5, "Up:");
-  setButton(6, "Right:");
-
-  // Second task: Save button selection
-  int x, y;
-  int button = 0;
-  while(button == 0) {
-    // If brain screen is touched
-    if (Brain.Screen.pressing()) {
-      x = Brain.Screen.xPosition();
-      y = Brain.Screen.yPosition();
-
-      button = whichButtonPressed(x, y);
-    }
-
-    // If controller button is pressed
-    else if (Controller1.ButtonY.pressing()) {
-      button = 1;
-    } else if (Controller1.ButtonX.pressing()) {
-      button = 2;
-    } else if (Controller1.ButtonA.pressing()) {
-      button = 3;
-    } else if (Controller1.ButtonLeft.pressing()) {
-      button = 4;
-    } else if (Controller1.ButtonUp.pressing()) {
-      button = 5;
-    } else if (Controller1.ButtonRight.pressing()) {
-      button = 6;
-    }
-  }
-  clearScreens();
-  Brain.Screen.setCursor(1, 1);
-  Brain.Screen.print("You selected button %d", button);
-*/
 }
+
 void autonomous(void) {
   Brain.Screen.clearScreen();
   Brain.Screen.setCursor(1,1);
