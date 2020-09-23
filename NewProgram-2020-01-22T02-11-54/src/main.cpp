@@ -102,102 +102,103 @@ int whichButtonPressed(int x, int y) {
 |   robot Functions
 |   specifically for different actions for autonomous
 |******************************************************* */
-void driveChassis(double distance, double sideways) { //moves the chassis motors a certain number of turns so the chassis can move linearlly
-  LeftMotor.startRotateFor(distance, turns);
-  RightMotor.rotateFor(distance, turns);
-  CenterMotor.rotateFor(sideways, turns);//only needed for moving sideways or used in conjunction with the other motors to move diagonally
+void driveChassis(double distance, double sideways) { //moves the chassis motors a certain number of turns so the chassis can move linearly
+ LeftMotor.startRotateFor(distance, turns);
+ RightMotor.rotateFor(distance, turns);
+ CenterMotor.rotateFor(sideways, turns);//only needed for moving sideways or used in conjunction with the other motors to move diagonally
 }
 void turnChassis(double distance, double sideways) { //moves the chassis motors a certain number of turns so the chassis can turn
-  LeftMotor.startRotateFor(distance, turns);
-  RightMotor.rotateFor(-distance, turns);
-  CenterMotor.rotateFor(sideways, turns); //might aide in turning??? not sure if we need this for this function
+ LeftMotor.startRotateFor(distance, turns);
+ RightMotor.rotateFor(-distance, turns);
+ CenterMotor.rotateFor(sideways, turns); //might aide in turning??? not sure if we need this for this function
 }
 void moveRamp(double angle) { //moves the ramp motor to a certain angle
-  RampMotor.spinToPosition(angle, degrees);
+ RampMotor.spinToPosition(angle, degrees);
 }
 void moveArms(double angle) { //moves the arms to a certain angle
-  ArmMotorLeft.spinToPosition(angle, degrees);  
-  ArmMotorRight.spinToPosition(angle, degrees);
+ ArmMotorLeft.spinToPosition(angle, degrees); 
+ ArmMotorRight.spinToPosition(angle, degrees);
 }
 void spinIntake (double rotations){
-  FlapMotor1.startRotateFor(rotations, turns);
-  FlapMotor2.rotateFor(rotations,turns);
+ FlapMotor1.startRotateFor(rotations, turns);
+ FlapMotor2.rotateFor(rotations,turns);
 }
-
+ 
 /* ******************************
 |                                |
 |    Different Autonomous Codes  |
 |                                |
 ******************************* */
-
+ 
 void simpleAuton(void) { // scores the preload and releases the intake rollers
-  driveChassis(-4, 0);  // moves backward 4 rotations
-  driveChassis(0, 0); // stops the chassis
-  driveChassis(5, 0); // moves forward 5 rotations
-  driveChassis(0, 0); // stops the chassis
-  moveRamp(10); // moves the ramp up 10 rotations to release the intake rollers
-  moveRamp(-10);  // moves the ramp back down to the original position, ready for the start of the match
+ driveChassis(-4, 0);  // moves backward 4 rotations
+ driveChassis(0, 0); // stops the chassis
+ driveChassis(5, 0); // moves forward 5 rotations
+ driveChassis(0, 0); // stops the chassis
+ moveRamp(10); // moves the ramp up 10 rotations to release the intake rollers
+ moveRamp(-10);  // moves the ramp back down to the original position, ready for the start of the match
 }
 void redSquareLeftauton(void) { //scores in the larger goal
-  moveRamp(10); // moves the ramp up 10 rotations to release the intake rollers
-  moveRamp(-10);  // moves the ramp back down to the original position, ready for the start of the match
-  spinIntake (30); //run the intake rollers for 30 rotations to intake the preload
-  turnChassis(-15,0); //turns the robot left to face the cube to the right of the red square
-  driveChassis(30,0); //drives the robot to the cube
-  spinIntake (30); //runs the intake rollers for 30 rotations to intake the cube
-  turnChassis(-15,0); //turns the robot left to face the cube in the other red square
-  driveChassis(20,0); //drive the robot towards the cube 
-  spinIntake (30); //runs the intake rollers for 30 rotations to intake the cube
-  turnChassis (-15,0); //turns the robot left to face the goal
-  driveChassis (5,0); //drives forward to position the cubes right up against the goal
-  spinIntake (-3); //runs the intake to outake the motors just a little to make sure they go into the goal
-  moveRamp(10); //moves the ramp up to positition it agaisnt the goal
-  moveRamp(-10); //moves the ramp back away from the stack
-  driveChassis(-20,0); //drives chassis away from the goal so the score is legal
-} 
-void redRightSideAuton(void){ //scores in the smaller goal 
-  moveRamp(10); // moves the ramp up 10 rotations to release the intake rollers
-  moveRamp(-10);  // moves the ramp back down to the original position, ready for the start of the match
-  driveChassis(30,0); //drives the robot to the cubes
-  spinIntake (200); //runs the intake rollers for 200 rotations to intake the cube
-  driveChassis(-25,0); //drives back towards the goal with the cubes
-  turnChassis (15,0); //turns the robot right to face the goal
-  driveChassis (5,0); //drives forward to position the cubes right up against the goal
-  spinIntake (-3); //runs the intake to outake the motors just a little to make sure they go into the goal
-  moveRamp(10); //moves the ramp up to position it against the goal
-  moveRamp(-10); //moves the ramp back away from the stack
-  driveChassis(-20,0); //drives chassis away from the goal so the score is legal
-} 
+ moveRamp(10); // moves the ramp up 10 rotations to release the intake rollers
+ moveRamp(-10);  // moves the ramp back down to the original position, ready for the start of the match
+ spinIntake (30); //run the intake rollers for 30 rotations to intake the preload
+ turnChassis(-15,0); //turns the robot left to face the cube to the right of the red square
+ driveChassis(30,0); //drives the robot to the cube
+ spinIntake (30); //runs the intake rollers for 30 rotations to intake the cube
+ turnChassis(-15,0); //turns the robot left to face the cube in the other red square
+ driveChassis(20,0); //drive the robot towards the cube
+ spinIntake (30); //runs the intake rollers for 30 rotations to intake the cube
+ turnChassis (-15,0); //turns the robot left to face the goal
+ driveChassis (5,0); //drives forward to position the cubes right up against the goal
+ spinIntake (-3); //runs the intake to outtake the motors just a little to make sure they go into the goal
+ moveRamp(10); //moves the ramp up to position it against the goal
+ moveRamp(-10); //moves the ramp back away from the stack
+ driveChassis(-20,0); //drives chassis away from the goal so the score is legal
+}
+void redRightSideAuton(void){ //scores in the smaller goal
+ moveRamp(10); // moves the ramp up 10 rotations to release the intake rollers
+ moveRamp(-10);  // moves the ramp back down to the original position, ready for the start of the match
+ driveChassis(30,0); //drives the robot to the cubes
+ spinIntake (200); //runs the intake rollers for 200 rotations to intake the cube
+ driveChassis(-25,0); //drives back towards the goal with the cubes
+ turnChassis (15,0); //turns the robot right to face the goal
+ driveChassis (5,0); //drives forward to position the cubes right up against the goal
+ spinIntake (-3); //runs the intake to outtake the motors just a little to make sure they go into the goal
+ moveRamp(10); //moves the ramp up to position it against the goal
+ moveRamp(-10); //moves the ramp back away from the stack
+ driveChassis(-20,0); //drives chassis away from the goal so the score is legal
+}
 void blueSquareRightauton(void) { //scores in the larger goal
-  moveRamp(10); // moves the ramp up 10 rotations to release the intake rollers
-  moveRamp(-10);  // moves the ramp back down to the original position, ready for the start of the match
-  spinIntake (30); //run the intake rollers for 30 rotations to intake the preload
-  turnChassis(15,0); //turns the robot right to face the cube to the right of the red square
-  driveChassis(30,0); //drives the robot to the cube
-  spinIntake (30); //runs the intake rollers for 30 rotations to intake the cube
-  turnChassis(15,0); //turns the robot right to face the cube in the other red square
-  driveChassis(20,0); //drive the robot towards the cube 
-  spinIntake (30); //runs the intake rollers for 30 rotations to intake the cube
-  turnChassis (15,0); //turns the robot right to face the goal
-  driveChassis (5,0); //drives forward to position the cubes right up against the goal
-  spinIntake (-3); //runs the intake to outake the motors just a little to make sure they go into the goal
-  moveRamp(10); //moves the ramp up to position it against the goal
-  moveRamp(-10); //moves the ramp back away from the stack
-  driveChassis(-20,0); //drives chassis away from the goal so the score is legal
-} 
- void blueLeftSideAuton (void){ //scores in the smaller goal
-  moveRamp(10); // moves the ramp up 10 rotations to release the intake rollers
-  moveRamp(-10);  // moves the ramp back down to the original position, ready for the start of the match
-  driveChassis(30,0); //drives the robot to the cubes
-  spinIntake (200); //runs the intake rollers for 200 rotations to intake the cube
-  driveChassis(-25,0); //drives back towards the goal with the cubes
-  turnChassis (-15,0); //turns the robot left to face the goal
-  driveChassis (5,0); //drives forward to position the cubes right up against the goal
-  spinIntake (-3); //runs the intake to outake the motors just a little to make sure they go into the goal
-  moveRamp(10); //moves the ramp up to position it against the goal
-  moveRamp(-10); //moves the ramp back away from the stack
-  driveChassis(-20,0); //drives chassis away from the goal so the score is legal
- }
+ moveRamp(10); // moves the ramp up 10 rotations to release the intake rollers
+ moveRamp(-10);  // moves the ramp back down to the original position, ready for the start of the match
+ spinIntake (30); //run the intake rollers for 30 rotations to intake the preload
+ turnChassis(15,0); //turns the robot right to face the cube to the right of the red square
+ driveChassis(30,0); //drives the robot to the cube
+ spinIntake (30); //runs the intake rollers for 30 rotations to intake the cube
+ turnChassis(15,0); //turns the robot right to face the cube in the other red square
+ driveChassis(20,0); //drive the robot towards the cube
+ spinIntake (30); //runs the intake rollers for 30 rotations to intake the cube
+ turnChassis (15,0); //turns the robot right to face the goal
+ driveChassis (5,0); //drives forward to position the cubes right up against the goal
+ spinIntake (-3); //runs the intake to outtake the motors just a little to make sure they go into the goal
+ moveRamp(10); //moves the ramp up to position it against the goal
+ moveRamp(-10); //moves the ramp back away from the stack
+ driveChassis(-20,0); //drives chassis away from the goal so the score is legal
+}
+void blueLeftSideAuton (void){ //scores in the smaller goal
+ moveRamp(10); // moves the ramp up 10 rotations to release the intake rollers
+ moveRamp(-10);  // moves the ramp back down to the original position, ready for the start of the match
+ driveChassis(30,0); //drives the robot to the cubes
+ spinIntake (200); //runs the intake rollers for 200 rotations to intake the cube
+ driveChassis(-25,0); //drives back towards the goal with the cubes
+ turnChassis (-15,0); //turns the robot left to face the goal
+ driveChassis (5,0); //drives forward to position the cubes right up against the goal
+ spinIntake (-3); //runs the intake to outtake the motors just a little to make sure they go into the goal
+ moveRamp(10); //moves the ramp up to position it against the goal
+ moveRamp(-10); //moves the ramp back away from the stack
+ driveChassis(-20,0); //drives chassis away from the goal so the score is legal
+}
+
 /*---------------------------------------------------------------------------*/
 /*                          Pre-Autonomous Functions                         */
 /*                                                                           */
