@@ -47,56 +47,172 @@ competition Competition;
 /*  by the (x,y) point. It returns an integer corresponding to the button,   */
 /*  between 1 and 6. It return 0 if the point is not on any button.          */
 /*---------------------------------------------------------------------------*/
+int AutonType = 0;
+int BrainScreenX = 480;
+int BrainScreenY = 240; 
 
-void setButton(int pos, const char* desc) { // , color c = black
-  // These should be the same as in whichButtonPressed
-  int size = 80;
-  int xs[8] = {10, 120, 230, 10, 120, 230};
-  int ys[8] = {25, 25, 25, 145, 145, 145};
-  int brows[8] = {1, 1, 1, 7, 7, 7};
-  int bcols[8] = {2, 13, 24, 2, 13, 24};
-  int crows[8] = {1, 2, 3, 1, 2, 3};
-  int ccols[8] = {1, 1, 1, 12, 12, 12};
-
-  // Draw the button on brain screen
-  Brain.Screen.drawRectangle(xs[pos-1], ys[pos-1], size, size);
-  Brain.Screen.setCursor(brows[pos-1], bcols[pos-1]);
-  Brain.Screen.print(desc);
-
-  // Print options to controller screen
-  Controller1.Screen.setCursor(crows[pos-1], ccols[pos-1]);
-  Controller1.Screen.print(desc);
-}
-
-void clearScreens() {
-  Brain.Screen.clearScreen();
-  Controller1.Screen.clearScreen();
-  task::sleep(500);
-}
-
-bool pointInRectangle(int x, int y, int x1, int y1, int x2, int y2) {
-  if ((x >= x1 && x <= x2) && (y >= y1 && y <= y2)) {
-    return true;
-  } else {
-    return false;
-  }
-}
-
-int whichButtonPressed(int x, int y) {
-  // These should be the same as in setButton
-  int size = 100;
-  int xs[8] = {10, 120, 230, 10, 120, 230};
-  int ys[8] = {25, 25, 25, 145, 145, 145};
-
-  // Return which button if point is in defined regions
-  for (int i=1; i <= 8; i++) {
-    if (pointInRectangle(x, y, xs[i-1], ys[i-1], xs[i-1]+size, ys[i-1]+size)) {
-      return i;
+int whichPressed(int x, int y){
+  if (y< BrainScreenY/2){
+    if (x<BrainScreenX/2){
+      return 1;
+    }
+    else{
+      return 2;
     }
   }
+  else {
+    if(x< BrainScreenX/2){
+      return 3;
+    }
+    else{
+      return 4;
+    }
+  }
+}
 
-  // Return 0 if not in defined button regions
-  return 0;
+/*------------------------------------------------------------------*/
+/*                          Robot Functions                         */
+/*                  designed for specific parts of                  */
+/*        robot actions to be used to symplify auton programing     */       
+/*                          based on time                           */
+/*------------------------------------------------------------------*/
+void driveForward(double percent, double wait){
+    LeftMotor.spin(directionType::fwd, percent, velocityUnits::pct);
+    RightMotor.spin(directionType::fwd, percent, velocityUnits::pct);
+    task::sleep(wait);
+}
+void driveBackward(double percent, double wait){
+    LeftMotor.spin(directionType::rev, 100, velocityUnits::pct);
+    RightMotor.spin(directionType::rev, 100, velocityUnits::pct);
+    task::sleep(wait);
+}
+void turnRight(double wait){
+    LeftMotor.spin(directionType::fwd, 100, velocityUnits::pct);
+    RightMotor.spin(directionType::rev, 100, velocityUnits::pct);
+    task::sleep(wait);
+}
+void turnLeft(double wait){
+    LeftMotor.spin(directionType::rev, 100, velocityUnits::pct);
+    RightMotor.spin(directionType::fwd, 100, velocityUnits::pct);
+    task::sleep(wait);
+}
+void stopChassis(){
+    LeftMotor.stop();
+    RightMotor.stop();
+}
+void upRamp (double wait){
+    RampMotor.spin(directionType::fwd, 100,velocityUnits::pct);
+    task::sleep(wait);
+}
+void downRamp (double wait){
+    RampMotor.spin(directionType::rev, 100,velocityUnits::pct);
+    task::sleep(wait);
+}
+void stopRamp (){
+    RampMotor.stop();
+}
+void upArms(double wait){
+    ArmMotorLeft.spin(directionType::fwd, 100, velocityUnits::pct);
+    ArmMotorRight.spin(directionType::fwd, 100, velocityUnits::pct);
+    task::sleep(wait);
+}
+void downArms(double wait){
+    ArmMotorLeft.spin(directionType::rev, 100, velocityUnits::pct);
+    ArmMotorRight.spin(directionType::rev, 100, velocityUnits::pct);
+    task::sleep(wait);
+}
+void stopArms(){
+    ArmMotorLeft.stop(brakeType::hold);
+    ArmMotorRight.stop(brakeType::hold);
+}
+void intake(double wait){
+    FlapMotor1.spin(directionType::fwd,85,velocityUnits::pct);
+    FlapMotor2.spin(directionType::fwd,85,velocityUnits::pct);
+    task::sleep(wait);
+}
+void outtake(double wait){
+    FlapMotor1.spin(directionType::rev,100,velocityUnits::pct);
+    FlapMotor2.spin(directionType::rev,100,velocityUnits::pct);
+    task::sleep(wait);
+}
+void stopRollers(){
+    FlapMotor1.stop();
+    FlapMotor2.stop();
+}
+void intakeForward(double percent, double wait){
+    LeftMotor.spin(directionType::fwd,percent,velocityUnits::pct);
+    RightMotor.spin(directionType::fwd,percent,velocityUnits::pct);
+    FlapMotor1.spin(directionType::fwd,85,velocityUnits::pct);
+    FlapMotor2.spin(directionType::fwd,85,velocityUnits::pct);
+    task::sleep(wait);    
+}
+void intakeBackward(double wait){
+    LeftMotor.spin(directionType::rev,100,velocityUnits::pct);
+    RightMotor.spin(directionType::rev,100,velocityUnits::pct);
+    FlapMotor1.spin(directionType::fwd,85,velocityUnits::pct);
+    FlapMotor2.spin(directionType::fwd,85,velocityUnits::pct);
+    task::sleep(wait);    
+}
+void intakeLeft(double wait){
+    FlapMotor1.spin(directionType::fwd,85,velocityUnits::pct);
+    FlapMotor2.spin(directionType::fwd,85,velocityUnits::pct);
+    LeftMotor.spin(directionType::rev,100,velocityUnits::pct);
+    RightMotor.spin(directionType::fwd,100,velocityUnits::pct);
+    task::sleep(wait);
+}
+void intakeRight(double wait){
+    FlapMotor1.spin(directionType::fwd,85,velocityUnits::pct);
+    FlapMotor2.spin(directionType::fwd,85,velocityUnits::pct);
+    LeftMotor.spin(directionType::fwd,100,velocityUnits::pct);
+    RightMotor.spin(directionType::rev,100,velocityUnits::pct);
+    task::sleep(wait);
+}
+void simplePreLoadAuton(){
+    driveBackward(100, 1000); //drive back at full speed for 1000 millisec to score preload
+    driveForward(100, 1000); //drive away at full speed for 1000 millisec to make sure it stays scored
+    stopChassis(); //stop driving 
+    //push out the rollers by having the ramp go up and back down
+    upRamp(500); //up for 500 millisec
+    downRamp(500); //down for 500 millisec
+    stopRamp(); //stop moving the ramp
+}
+void RedSideAuton (){//Red Side, towards the smaller goal 
+    //push out the rollers by having the ramp go up and back down
+    upRamp(700); //up for 700 millisec
+    downRamp(700); //down for 700 millisec
+    stopRamp(); //stop moving the ramp 
+    task::sleep(50); //waiting here 'cause trisha said so
+    intakeForward(75,3500); //drive into the cube at 75% speed and intake the cubes for 3500 millisec
+    stopRollers(); //stop moving the rollers
+    driveBackward(100, 2000); //drive back at full speed for 2000 millisec to the goal
+    turnRight(900); //turn right for 900 millisec to face the goal
+    driveForward(100, 1000); //drive to the goal at full speed for 1000 millisecs
+    stopChassis(); //stop driving
+    upRamp(750);//stack cubes by moving ramp forwards for 750 millisec 
+    outtake(800); //outtake cubes a little bit
+    stopRollers(); //stop moving the rollers
+    driveBackward(75, 750); //Back away from the cubes at 75% speed for 750 millisec 
+    stopChassis(); //stop driving    
+} 
+ void BlueSideAuton (){ //Blue Side, towards the smaller goal
+    //push out the rollers by having the ramp go up and back down
+    upRamp(800); //up for 800 millisec
+    downRamp(800); //down for 800 millisec
+    stopRamp(); //stop moving the ramp 
+    task::sleep(50); //waiting here 'cause trisha said so
+    intakeForward(60,3800); //drive into the cube at 60% speed and intake the cubes for 3800 millisec
+    intake(350);//intake to hold in cubes
+    stopRollers(); //stop moving the rollers
+    driveBackward(80, 1875); //drive back at 80% speed for 1875 millisec to the goal
+    intakeLeft(940);//turn left at a certain angle to face the goal and intake to hold in the cubes for 940 millisec
+    stopRollers(); //stop moving the rollers
+    driveForward(100, 900); //drive to the goal at full speed for 900 millisecs
+    stopChassis(); //stop driving
+    upRamp(750);//stack cubes by moving ramp forwards for 750 millisec 
+    outtake(800); //outtake cubes a little bit
+    stopRollers(); //stop moving the ramp
+    driveBackward(75, 750); //Back away from the cubes at 75% speed for 750 millisec 
+    stopChassis(); //stop driving
 }
 /* *******************************************************|
 |   robot Functions
@@ -223,60 +339,137 @@ void preAuton(void) {
   Controller1.Screen.print("MAIN");
   Controller2.Screen.print("PARTNER");
   //displays the percentage of batter level left for the robot when the code is turned on
-  Brain.Screen.print(Brain.Battery.capacity());
-  //displays which auton code is running <-- currently not necessarily needed 
-  // Brain.Screen.printAt (20, 40, "Red Alliance, Right Square");
-  
+  Brain.Screen.print("%d percent battery left",Brain.Battery.capacity());
   //resets the encoder values for the ramp control & arms 
   //useful for autonomous codes
   RampMotor.resetRotation();
   ArmMotorLeft.resetRotation();
   ArmMotorRight.resetRotation();
-  // Selection of autonomous tasks using brain screen or controller
-  // First task: Define buttons
-  clearScreens();
-  setButton(1, "Y:");
-  setButton(2, "X:");
-  setButton(3, "A:");
-  setButton(4, "Left:");
-  setButton(5, "Up:");
-  setButton(6, "Right:");
+//Auton Select
+  int page = 1;
+  int pageMax = 2;
 
-  // Second task: Save button selection
+  while (true){
+  //list on controller (^X >A vB <Y)
+  if (page == 1){
+    Controller1.Screen.clearScreen();
+    Controller1.Screen.setCursor(1,1);
+    Controller1.Screen.print("X: Red, Left (1)");
+    Controller1.Screen.newLine();
+    Controller1.Screen.print("A: Blue, Right (2)");
+    Controller1.Screen.newLine();
+    Controller1.Screen.print("page 1 of 2");
+  }
+  else if (page == 2){
+    Controller1.Screen.clearScreen();
+    Controller1.Screen.setCursor( 1,1);
+    Controller1.Screen.print("B: Red, Left (3)");
+    Controller1.Screen.newLine();
+    Controller1.Screen.print("Y: Blue, Right (4)");
+    Controller1.Screen.newLine();
+    Controller1.Screen.print("page 2 of 2");
+  }
+ //List on Brain 
+  Brain.Screen.drawLine(0, BrainScreenY/2, BrainScreenX, BrainScreenY/2);
+  Brain.Screen.drawLine(BrainScreenX/2, 0, BrainScreenX/2, BrainScreenY);
+  Brain.Screen.setCursor(2,2);
+  Brain.Screen.print("X: Red, Left (1)");
+  Brain.Screen.newLine();
+  Brain.Screen.print("[NOT TESTED]");
+  Brain.Screen.setCursor(2,27);
+  Brain.Screen.print("A: Blue, Right (2)");
+  Brain.Screen.setCursor(3, 27);
+  Brain.Screen.print("[NOT TESTED]");
+  Brain.Screen.setCursor(8,2);
+  Brain.Screen.print("B: Red, Right (3)");
+  Brain.Screen.setCursor(8,27);
+  Brain.Screen.print("Y: Blue, Left (4)");
+
+  //Wait for selection 
   int x, y;
-  int button = 0;
-  while(button == 0) {
-    // If brain screen is touched
+  while (AutonType ==0){
     if (Brain.Screen.pressing()) {
       x = Brain.Screen.xPosition();
       y = Brain.Screen.yPosition();
-
-      button = whichButtonPressed(x, y);
+      AutonType = whichPressed(x, y);
     }
-
-    // If controller button is pressed
-    else if (Controller1.ButtonY.pressing()) {
-      button = 1;
-    } else if (Controller1.ButtonX.pressing()) {
-      button = 2;
-    } else if (Controller1.ButtonA.pressing()) {
-      button = 3;
-    } else if (Controller1.ButtonLeft.pressing()) {
-      button = 4;
-    } else if (Controller1.ButtonUp.pressing()) {
-      button = 5;
-    } else if (Controller1.ButtonRight.pressing()) {
-      button = 6;
+    else if (Controller1.ButtonRight.pressing() || Controller1.ButtonDown.pressing()){
+      page+= 1;
+      if (page > pageMax){
+        page = 1;
+      }
+      break;
+    } 
+    else if (Controller1.ButtonLeft.pressing() || Controller1.ButtonUp.pressing()){
+      page -= 1;
+      if (page < 1){
+        page = pageMax;
+      }
+      break;
     }
-  }
+    else if (Controller1.ButtonX.pressing()){
+      AutonType = 1;
+    }
+    else if (Controller1.ButtonA.pressing()){
+      AutonType = 2;
+    }
+    else if (Controller1.ButtonB.pressing()){
+      AutonType = 3;
+    }
+    else if (Controller1.ButtonY.pressing()){
+      AutonType = 4;
+    }    
+  }//while (AutonType)
 
-  clearScreens();
-  Brain.Screen.setCursor(1, 1);
-  Brain.Screen.print("You selected button %d", button);
+  //Keep Logging until Selection is made 
+    if (AutonType >0){
+      break;
+    }
+  }//while (true)
+  
+  //Display Selction on Controller
+  Controller1.Screen.clearScreen();
+  Controller1.Screen.setCursor(1,1);
+  Controller1.Screen.print("Autonmous Routine");
+  Controller1.Screen.newLine();
+  Controller1.Screen.print("%d Selected", AutonType);
+
+  //Display Selection on brain
+  Brain.Screen.clearScreen();
+  Brain.Screen.setCursor(1,1);
+  Brain.Screen.print("Autonmous Routine %d selected", AutonType);
+  
+  //must return for autonomous or driverControl to run
+  return;
 }
 
 void autonomous(void) {
-  simpleAuton();//scores the preload and flips out the intake rollers
+  Brain.Screen.clearScreen();
+  Brain.Screen.setCursor(1,1);
+
+  if (AutonType == 1){
+    Brain.Screen.print("Running Red, Left Side Autonomous");
+    redSquareLeftauton();
+  } 
+  else if (AutonType == 2){
+    Brain.Screen.print("Running Blue, Right Side Autonomous");
+    blueSquareRightauton();
+  } 
+  else if (AutonType == 3){
+    Brain.Screen.print("Running Red, Right Side Autonomous");
+    RedSideAuton();
+    //redRightSideAuton();
+  } 
+  else if (AutonType == 4){
+    Brain.Screen.print("Running Blue, Right Side Autonomous");
+    BlueSideAuton();
+    //blueLeftSideAuton();
+  } 
+  else if (AutonType == 0) {
+    Brain.Screen.print("Running One Cube Autonomous");
+    simplePreLoadAuton();
+    //simpleAuton();//scores the preload and flips out the intake rollers
+  }
 
 }
 
@@ -315,7 +508,7 @@ void driverControl(void) {
     CenterMotor.spin( forward, -z*0.5 ,  pct); //5th wheel
     */
     // arms control
-    if (Controller2.ButtonX.pressing()) {
+    /*if (Controller2.ButtonX.pressing()) {
       // move the motors up so they are parallel to the ground
       ArmMotorLeft.spinToPosition(45, degrees);
       ArmMotorRight.spinToPosition(45, degrees);
@@ -334,17 +527,20 @@ void driverControl(void) {
       // both are controlled by moving the left pot(joystick) on the 2nd controller up and down
       ArmMotorLeft.spin(forward, Controller2.Axis3.value(), pct);
       ArmMotorRight.spin(forward, Controller2.Axis3.value(), pct);
-    }
-
+    }*/
+    //the regular control for the arms
+      // both are controlled by moving the left pot(joystick) on the 2nd controller up and down
+      ArmMotorLeft.spin(forward, Controller2.Axis3.value(), pct);
+      ArmMotorRight.spin(forward, Controller2.Axis3.value(), pct);
     // flaps -- goes around in circles to pick up the cube
     if (Controller2.ButtonUp.pressing()) {
       //moves the intake rollers so they intake cubes
-      FlapMotor1.spin(forward, 100, pct);
-      FlapMotor2.spin(forward, 100, pct);
+      FlapMotor1.spin(forward, 80, pct);
+      FlapMotor2.spin(forward, 80, pct);
     } else if (Controller2.ButtonDown.pressing()) {
       //moves the intake rollers so they outtake cubes
-      FlapMotor1.spin(reverse, 100, pct);
-      FlapMotor2.spin(reverse, 100, pct);
+      FlapMotor1.spin(reverse, 80, pct);
+      FlapMotor2.spin(reverse, 80, pct);
     } else {
       //keeps the motors from moving when the buttons are not pressed
       FlapMotor2.stop();
@@ -352,7 +548,7 @@ void driverControl(void) {
     }
 
     // Ramp control
-    RampMotor.spin(forward, Controller2.Axis4.value(), pct); //moves the cube ramp up and down
+    RampMotor.spin(forward, Controller2.Axis1.value()/2, pct); //moves the cube ramp up and down
 
     wait(20, msec); // Sleep the task for a short amount of time
   }
